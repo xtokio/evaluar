@@ -1,0 +1,31 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations_questions" href="#" data-load-link="load" data-link="/evaluation/questions/<%= evaluation_id %>">Questions</a> > New</h3>
+
+<label for="txt_question" style="display: block; margin-bottom: 5px;">Question</label>
+<input type="text" id="txt_question" placeholder="Question" style="margin-bottom: 10px;">
+
+<label for="cmb_active" class="simple" style="display: block; margin-bottom: 5px;">Active</label>
+<select id="cmb_active">
+  <option value="0">Off</option>
+  <option value="1">On</option>
+</select>
+
+<div style="text-align: right;">
+  <button id="btn_new" class="btn btn-primary" data-evaluation_id="<%= evaluation_id %>" style="width: 120px;">Create</button>
+</div>
+
+<script>
+  $("#btn_new").on("click", async function(){
+    let evaluation_id = $(this).attr("data-evaluation_id");
+    let question      = $("#txt_question").val();
+    let active        = $("#cmb_active").val();
+    let params        = {evaluation_id,question,active};
+
+    let response = await App.post(`/evaluation/questions/new/${evaluation_id}`,params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_evaluations_questions").trigger("click");
+    else
+      App.show_error("Insert error.");
+  });
+</script>

@@ -1,0 +1,51 @@
+<h3>Settings > <a id="lnk_menu_settings_users" href="#" data-load-link="load" data-link="/users">Users</a> > New</h3>
+
+<label for="txt_user" style="display: block; margin-bottom: 5px;">User</label>
+<input type="text" id="txt_user" placeholder="User" style="margin-bottom: 10px;">
+
+<label for="txt_password" style="display: block; margin-bottom: 5px;">Password</label>
+<input type="text" placeholder="Password" id="txt_password" style="margin-bottom: 10px;">
+
+<label for="txt_name" style="display: block; margin-bottom: 5px;">Name</label>
+<input type="text" placeholder="Full name" id="txt_name" style="margin-bottom: 10px;">
+
+<label for="txt_email" style="display: block; margin-bottom: 5px;">Email</label>
+<input type="text" placeholder="Email" id="txt_email" style="margin-bottom: 10px;">
+
+<label for="cmb_type" class="simple" style="display: block; margin-bottom: 5px;">Type</label>
+<select id="cmb_type">
+  <option value="Student">Student</option>
+  <option value="Faculty">Faculty</option>
+  <option value="Administrator">Administrator</option>
+</select>
+
+<label for="cmb_active" class="simple" style="display: block; margin-bottom: 5px;">Active</label>
+<select id="cmb_active">
+  <option value="1">On</option>
+  <option value="0">Off</option>
+</select>
+
+
+<div style="text-align: right;">
+    <button id="btn_new" class="btn btn-primary" style="width: 120px;">Create</button>
+</div>
+
+<script>
+  $("#btn_new").on("click", async function(){
+    let user      = $("#txt_user").val();
+    let password  = $("#txt_password").val();
+    let name      = $("#txt_name").val();
+    let email     = $("#txt_email").val();
+    let type      = $("#cmb_type").val();
+    let active    = $("#cmb_active").val();
+    let params = {user,password,name,email,type,active};
+
+    let response = await App.post("/users/new",params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_users").trigger("click");
+    else
+      App.show_error("Insert error.");
+  });
+</script>

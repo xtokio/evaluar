@@ -1,0 +1,35 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations" href="#" data-load-link="load" data-link="/evaluations">Evaluations</a> > <a id="lnk_menu_settings_questions" href="#" data-load-link="load" data-link="/evaluation/questions/<%= questions[0].evaluation_id %>">Questions</a> > <a id="lnk_menu_settings_evaluations_options" href="#" data-load-link="load" data-link="/question/options/<%= question_id %>">Options</a> > New</h3>
+
+<label for="cmb_type" style="display: block; margin-bottom: 5px;">Type</label>
+<select id="cmb_type">
+  <option value="text">Text</option>
+  <option value="choice">Choice</option>
+</select>
+
+<label for="txt_label" style="display: block; margin-bottom: 5px;">Label</label>
+<input type="text" id="txt_label" placeholder="Label" style="margin-bottom: 10px;">
+
+<label for="txt_value" style="display: block; margin-bottom: 5px;">Value</label>
+<input type="text" id="txt_value" placeholder="Value" style="margin-bottom: 10px;">
+
+<div style="text-align: right;">
+  <button id="btn_new" class="btn btn-primary" data-question_id="<%= question_id %>" style="width: 120px;">Create</button>
+</div>
+
+<script>
+  $("#btn_new").on("click", async function(){
+    let question_id = $(this).attr("data-question_id");
+    let type        = $("#cmb_type").val();
+    let label       = $("#txt_label").val();
+    let value       = $("#txt_value").val();
+    let params      = {question_id,type,label,value};
+
+    let response = await App.post(`/question/options/new/${question_id}`,params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_evaluations_options").trigger("click");
+    else
+      App.show_error("Insert error.");
+  });
+</script>

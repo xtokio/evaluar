@@ -1,0 +1,31 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations_questions" href="#" data-load-link="load" data-link="/evaluation/questions/<%= question[0].evaluation_id %>">Questions</a> > New</h3>
+
+<label for="txt_question" style="display: block; margin-bottom: 5px;">Question</label>
+<input type="text" id="txt_question" placeholder="Question" value="<%= question[0].question %>" style="margin-bottom: 10px;">
+
+<label for="cmb_active" style="display: block; margin-bottom: 5px;">Active</label>
+<select id="cmb_active" class="simple">
+  <option value="1" <% if question[0].active == 1 %> selected <% end %>>On</option>
+  <option value="0" <% if question[0].active == 0 %> selected <% end %>>Off</option>
+</select>
+
+<div style="text-align: right;">
+  <button id="btn_update" class="btn btn-primary" data-id="<%= question[0].id %>" style="width: 120px;">Update</button>
+</div>
+
+<script>
+  $("#btn_update").on("click", async function(){
+    let id       = $(this).attr("data-id");
+    let question = $("#txt_question").val();
+    let active   = $("#cmb_active").val();
+    let params   = {id,question,active};
+
+    let response = await App.post("/evaluation/questions/update",params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_evaluations_questions").trigger("click");
+    else
+      App.show_error("Update error.");
+  });
+</script>

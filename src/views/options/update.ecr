@@ -1,0 +1,32 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations" href="#" data-load-link="load" data-link="/evaluations">Evaluations</a> > <a id="lnk_menu_settings_questions" href="#" data-load-link="load" data-link="/evaluation/questions/<%= questions[0].evaluation_id %>">Questions</a> > <a id="lnk_menu_settings_question_options" href="#" data-load-link="load" data-link="/question/options/<%= questions[0].id %>">Options</a> > Update</h3>
+
+<label for="txt_type" style="display: block; margin-bottom: 5px;">Type</label>
+<input type="text" id="txt_type" placeholder="Type" value="<%= option[0].type %>" style="margin-bottom: 10px;">
+
+<label for="txt_label" style="display: block; margin-bottom: 5px;">Label</label>
+<input type="text" id="txt_label" placeholder="Label" value="<%= option[0].label %>" style="margin-bottom: 10px;">
+
+<label for="txt_value" style="display: block; margin-bottom: 5px;">Value</label>
+<input type="text" id="txt_value" placeholder="Value" value="<%= option[0].value %>" style="margin-bottom: 10px;">
+
+<div style="text-align: right;">
+  <button id="btn_update" class="btn btn-primary" data-id="<%= option[0].id %>" style="width: 120px;">Update</button>
+</div>
+
+<script>
+  $("#btn_update").on("click", async function(){
+    let id     = $(this).attr("data-id");
+    let type   = $("#txt_type").val();
+    let label  = $("#txt_label").val();
+    let value  = $("#txt_value").val();
+    let params = {id,type,label,value};
+
+    let response = await App.post("/question/options/update",params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_question_options").trigger("click");
+    else
+      App.show_error("Update error.");
+  });
+</script>

@@ -1,0 +1,35 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations" href="#" data-load-link="load" data-link="/evaluations">Evaluations</a> > New</h3>
+
+<label for="txt_evaluation" style="display: block; margin-bottom: 5px;">Evaluation</label>
+<input type="text" id="txt_evaluation" placeholder="Evaluation" style="margin-bottom: 10px;">
+
+<label for="txt_description" style="display: block; margin-bottom: 5px;">Description</label>
+<input type="text" id="txt_description" placeholder="Description" style="margin-bottom: 10px;">
+
+<label for="dtp_start_date" style="display: block; margin-bottom: 5px;">Start Date</label>
+<input type="text" id="dtp_start_date" placeholder="" class="datepicker-custom" style="margin-bottom: 10px;">
+
+<label for="dtp_end_date" style="display: block; margin-bottom: 5px;">Start Date</label>
+<input type="text" id="dtp_end_date" placeholder="" class="datepicker-custom" style="margin-bottom: 10px;">
+
+<div style="text-align: right;">
+    <button id="btn_new" class="btn btn-primary" style="width: 120px;">Create</button>
+</div>
+
+<script>
+  $("#btn_new").on("click", async function(){
+    let evaluation  = $("#txt_evaluation").val();
+    let description = $("#txt_description").val();
+    let start_date  = $("#dtp_start_date").val();
+    let end_date    = $("#dtp_end_date").val();
+    let params = {evaluation,description,start_date,end_date};
+
+    let response = await App.post("/evaluations/new",params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_evaluations").trigger("click");
+    else
+      App.show_error("Insert error.");
+  });
+</script>

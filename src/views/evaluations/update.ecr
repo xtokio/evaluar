@@ -1,0 +1,36 @@
+<h3>Settings > <a id="lnk_menu_settings_evaluations" href="#" data-load-link="load" data-link="/evaluations">Evaluations</a> > New</h3>
+
+<label for="txt_evaluation" style="display: block; margin-bottom: 5px;">Evaluation</label>
+<input type="text" id="txt_evaluation" placeholder="Evaluation" value="<%= evaluation[0].evaluation %>" style="margin-bottom: 10px;">
+
+<label for="txt_description" style="display: block; margin-bottom: 5px;">Description</label>
+<input type="text" id="txt_description" placeholder="Description" value="<%= evaluation[0].description %>" style="margin-bottom: 10px;">
+
+<label for="dtp_start_date" style="display: block; margin-bottom: 5px;">Start Date</label>
+<input type="text" id="dtp_start_date" placeholder="" class="datepicker-custom" value="<%= evaluation[0].start_date %>" style="margin-bottom: 10px;">
+
+<label for="dtp_end_date" style="display: block; margin-bottom: 5px;">Start Date</label>
+<input type="text" id="dtp_end_date" placeholder="" class="datepicker-custom" value="<%= evaluation[0].end_date %>" style="margin-bottom: 10px;">
+
+<div style="text-align: right;">
+  <button id="btn_update" class="btn btn-primary" data-id="<%= evaluation[0].id %>" style="width: 120px;">Update</button>
+</div>
+
+<script>
+  $("#btn_update").on("click", async function(){
+    let id          = $(this).attr("data-id");
+    let evaluation  = $("#txt_evaluation").val();
+    let description = $("#txt_description").val();
+    let start_date  = $("#dtp_start_date").val();
+    let end_date    = $("#dtp_end_date").val();
+    let params = {id,evaluation,description,start_date,end_date};
+
+    let response = await App.post("/evaluations/update",params).catch(message => App.show_error(message));
+    let data = await response.json();
+    
+    if(data.status == "OK")
+      $("#lnk_menu_settings_evaluations").trigger("click");
+    else
+      App.show_error("Update error.");
+  });
+</script>
